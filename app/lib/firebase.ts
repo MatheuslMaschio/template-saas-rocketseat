@@ -4,9 +4,12 @@ import { getFirestore } from "firebase-admin/firestore";
 import "server-only";
 
 const decodedKey = Buffer.from(
-    process.env.FIREBASE_PRIVATE_KEY_BASE64!, 
+    process.env.FIREBASE_PRIVATE_KEY_BASE64!,
     "base64"
 ).toString("utf-8")
+    .split("\n")
+    .map((line) => line.trim())
+    .join("\n");
 
 export const firebaseCert = cert({
     projectId: process.env.FIREBASE_PROJECT_ID,
