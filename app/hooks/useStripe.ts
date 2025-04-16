@@ -23,11 +23,11 @@ export function useStripe() {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(checkoutData),
-            })
+            });
 
             const data = await response.json();
 
-            await stripe.redirectToCheckout({ sessionId: data.id });
+            await stripe.redirectToCheckout({ sessionId: data.sessionId });
 
         } catch (error) {
             console.error(error);
@@ -37,6 +37,8 @@ export function useStripe() {
 
     async function createSubscriptionStripeCheckout(checkoutData: any) {
         if (!stripe) return;
+
+        console.log("checkoutData:", checkoutData);
 
         try {
             const response = await fetch("/api/stripe/create-subscription-checkout", {
@@ -49,13 +51,13 @@ export function useStripe() {
 
             const data = await response.json();
 
-            await stripe.redirectToCheckout({ sessionId: data.id });
+            await stripe.redirectToCheckout({ sessionId: data.sessionId });
         } catch (error) {
             console.error(error);
         }
     }
 
-    async function createPortalStripeCheckout(checkoutData: any) {
+    async function handleCreateStripePortal() {
         const response = await fetch("/api/stripe/create-portal", {
             method: "POST",
             headers: {
@@ -71,6 +73,6 @@ export function useStripe() {
     return {
         createPaymentStripeCheckout,
         createSubscriptionStripeCheckout,
-        createPortalStripeCheckout
+        handleCreateStripePortal
     };
 }
